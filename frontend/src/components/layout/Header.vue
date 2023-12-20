@@ -26,10 +26,10 @@ import SessionTimer from '@/components/common/SessionTimer.vue';
 
 // State
 import { storeToRefs } from 'pinia';
-import { useCommonStore } from '@/store/commonStore';
+import { useLoginStore } from '@/store/loginStore';
 
 // Whether the sidebar is open or not
-const { sidebarOpen } = storeToRefs(useCommonStore());
+const { sidebarOpen } = storeToRefs(useLoginStore());
 
 /**
  * Toggle the sidebar open or closed

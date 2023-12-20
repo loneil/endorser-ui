@@ -5,7 +5,7 @@ import NotFound from '@/views/NotFound.vue';
 // Routing sections
 import endorserRoutes from './endorserRoutes';
 
-import { useTenantStore, useTokenStore } from '../store';
+import { useTokenStore } from '../store';
 
 const routes = [
   { path: '/:pathMatch(.*)', component: NotFound },
@@ -42,12 +42,10 @@ const resetLoginDataOnRefresh = (toPath: string, fromPath: string) => {
 
 const removeLoginData = () => {
   useTokenStore().clearToken();
-  useTenantStore().clearTenant();
 };
 
 const setLocalStorage = (token: string) => {
   useTokenStore().setToken(token);
-  useTenantStore().setTenantLoginDataFromLocalStorage();
 };
 
 export default router;

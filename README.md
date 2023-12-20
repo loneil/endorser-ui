@@ -98,7 +98,6 @@ When developing the Tenant UI, adhere to localization best practices including
 
 Currently localization is handled at the Tenant UI frontend level, but data that returns to the frontend from the Traction and AcaPy APIs may not include localization of text and status codes, etc. As such, full localization is a work in progress and will require some future work in integrating with Traction and AcaPy.
 
-
 To ensure that the language files are consistent with each other additional helper scripts have been added
 
 - `fill-keys` takes everything in en.json and fills the other lang files with the entries suffixed by the locale code.
@@ -116,10 +115,11 @@ Replacing `fill-keys` with which ever script your would like to run
 ## OIDC Login for Innkeeper
 
 The Tenant UI Inkeeper functionality can be configured to log in with either (or both)
+
 - the Innkeeper secret
 - a configured OIDC provider
 
-To set up the OIDC provider of your choice, add configuration values in your deployment to match the `frontend.innkeeperOidc` fields for a auth code grant client,a nd configure the `server.oidc` fields appropriately to veify the JWKS for tokens from that client. 
+To set up the OIDC provider of your choice, add configuration values in your deployment to match the `frontend.innkeeperOidc` fields for a auth code grant client,a nd configure the `server.oidc` fields appropriately to veify the JWKS for tokens from that client.
 
 As well, the Innkeeper secret must be available to the Tenant UI server, this is set in `server.innkeeper` configuration...
 
@@ -130,6 +130,7 @@ purposes we have included [maildev](https://maildev.github.io/maildev/) to assis
 mocking these emails in place of a proper SMTP server.
 
 To enable this set the following environment variables before starting the `tenant-ui`
+
 - `SERVER_SMTP_SERVER=maildev`
 - `SERVER_SMTP_PORT=1025`
 
@@ -137,12 +138,3 @@ To view the emails being sent open http://localhost:1080/ in your web browser
 
 By default this is already configured in the docker-compose file. For
 local use you will need to start `maildev` manually.
-
-## Configuring Matomo
-
-If you would like to use Matomo for tracking you can set the FRONTEND_MATOMO_URL environment variable as exposed in [custom-environment-variables.json](../config/custom-environment-variables.json)
-
-If no value is set using either of these methods MATOMO tracker code will never be loaded.
-
-For more information on configuration settings see
-[Set up your configuration](https://github.com/bcgov/traction/tree/main/services/tenant-ui#set-up-your-configuration)

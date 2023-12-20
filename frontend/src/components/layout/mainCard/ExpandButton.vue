@@ -14,7 +14,7 @@
 // View
 import Button from 'primevue/button';
 //State
-import { useCommonStore } from '@/store/commonStore';
+import { useLoginStore } from '@/store/loginStore';
 import { storeToRefs } from 'pinia';
-const { cardExpanded } = storeToRefs(useCommonStore());
+const { cardExpanded } = storeToRefs(useLoginStore());
 </script>

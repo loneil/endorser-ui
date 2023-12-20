@@ -10,11 +10,10 @@
 import { defineStore, storeToRefs } from 'pinia';
 import axios from 'axios';
 import { useConfigStore } from './configStore';
-import { useTenantStore, useTokenStore } from './index';
+import { useTokenStore } from './index';
 
 export const useEndorserServiceApi = defineStore('endorserServiceApi', () => {
   const tokenStore = useTokenStore();
-  const tenantStore = useTenantStore();
   const { config } = storeToRefs(useConfigStore());
 
   function createAxios(options = {}) {
@@ -68,7 +67,6 @@ export const useEndorserServiceApi = defineStore('endorserServiceApi', () => {
       console.error(error);
       if (error.response.status === 401) {
         tokenStore.clearToken();
-        tenantStore.clearTenant();
         return Promise.reject(
           `Unauthorized ${
             ': ' + error.response.data.reason ? error.response.data.reason : ''

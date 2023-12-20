@@ -1,13 +1,7 @@
 <template>
-  <div class="surface-section px-4 py-8 md:px-6 lg:px-8 text-center">
-    <div class="center-boxed">
-      <div class="img-holder">
-        <img src="/img/logo/traction-logo-5.svg" />
-      </div>
-    </div>
-    <div class="mt-3 mb-3 font-bold text-2xl">
-      <span class="text-900">Hi</span>
-    </div>
+  <div class="px-4 pb-8 text-center">
+    <h1 class="mb-8">Endorser Service UI</h1>
+    <h3 class="mb-8"><strong>Endorser:</strong> BCOVRIN-TEST</h3>
   </div>
 </template>
 

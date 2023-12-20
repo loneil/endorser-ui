@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { defineStore, storeToRefs } from 'pinia';
-import { Ref, ref } from 'vue';
+import { Ref, computed, ref } from 'vue';
 import { useConfigStore } from './configStore';
 import { UserManager, UserManagerSettings } from 'oidc-client-ts';
 import { API_PATH } from '@/helpers/constants';
 import { useTokenStore } from './tokenStore';
-import { useRouter } from 'vue-router';
+import  router from '../router/index';
 
 export const useLoginStore = defineStore('loginStore', () => {
   // other stores
@@ -51,12 +51,12 @@ export const useLoginStore = defineStore('loginStore', () => {
         loginCfg
       );
       token.value = response.data.access_token;
-      if (token.value) localStorage.setItem('token-innkeeper', token.value);
+      if (token.value) localStorage.setItem('token-endorser-service', token.value);
 
       // strip the oidc return params
-      window.history.pushState({}, document.title, '/home');
+      window.history.pushState({}, document.title, '/');
       // push the router to the home page
-      const router = useRouter();
+      // @ts-ignore
       router.push('/home');
     } catch (err: any) {
       error.value = err;
@@ -66,12 +66,29 @@ export const useLoginStore = defineStore('loginStore', () => {
   });
 
   // state
+  const cardExpanded = ref(false);
   const error: any = ref(null);
   const ledger: Ref<string> = ref('BCOVRIN-TEST');
   const loading: any = ref(false);
+  const sidebarOpen: Ref<boolean | null> = ref(null);
   const user: any = ref(null);
 
   // getters
+  const isLoggedIn = computed(() => {
+    return token.value != null;
+  });
+
+  const sidebarOpenClass = computed(() => {
+    if (sidebarOpen.value === null) {
+      // Use media queries
+      return null;
+    } else if (sidebarOpen.value) {
+      // Default width
+      return 'open';
+    } else {
+      return 'closed'; // Mobile width
+    }
+  });
 
   // actions
   async function login(ledgerId: string) {
@@ -80,9 +97,13 @@ export const useLoginStore = defineStore('loginStore', () => {
   }
 
   return {
+    cardExpanded,
     error,
+    isLoggedIn,
     ledger,
     loading,
+    sidebarOpen,
+    sidebarOpenClass,
     user,
     login,
   };

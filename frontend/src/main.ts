@@ -28,7 +28,7 @@ async function loadApp() {
   const app = createApp(App);
   // 2. load storage
   const pinia = createPinia();
-  app.use(pinia);
+    app.use(pinia);
   // 3. load configuration from server (and store it!)
   const configStore = useConfigStore();
   // listen for errors loading configuration...
@@ -50,22 +50,6 @@ async function loadApp() {
   await configStore.load();
   // manually remove the listener
   unsubscribe();
-
-  // Matomo Setup
-  const MATOMO_URL: string = configStore.config.frontend.matomoUrl;
-  if (MATOMO_URL) {
-    import('./matomoSetup')
-      .then((m: { setup: (url: string) => void }) => {
-        console.log(m.setup(MATOMO_URL));
-        console.log('initialized Matomo');
-        console.log(`${MATOMO_URL}`);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  } else {
-    console.warn('Matomo not configured');
-  }
 
   // 4. load/initialize other components
   app.use(i18n);

@@ -2,12 +2,7 @@
 import { storeToRefs } from 'pinia';
 import ConfirmPopup from 'primevue/confirmpopup';
 import { onMounted } from 'vue';
-import {
-  useConfigStore,
-  useInnkeeperTokenStore,
-  useTenantStore,
-  useTokenStore,
-} from './store';
+import { useConfigStore, useTokenStore } from './store';
 
 const { config } = storeToRefs(useConfigStore());
 
@@ -17,12 +12,7 @@ onMounted(() => {
   // This is used to remove localStorage data when the user driectly accesses the app as a new window or tab.
   // The token is still in the browser localstorage before this, so it is a superficial security measure.
   if (sessionStorage.getItem('reloaded') == null) {
-    if (window.location.href.includes('/innkeeper'))
-      useInnkeeperTokenStore().clearToken();
-    else {
-      useTokenStore().clearToken();
-      useTenantStore().clearTenant();
-    }
+    useTokenStore().clearToken();
   }
 
   sessionStorage.setItem('reloaded', 'true');

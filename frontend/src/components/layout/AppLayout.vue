@@ -26,7 +26,7 @@ import Sidebar from './Sidebar.vue';
 
 // State
 import { storeToRefs } from 'pinia';
-import { useCommonStore } from '@/store/commonStore';
+import { useLoginStore } from '@/store/loginStore';
 
-const { sidebarOpenClass } = storeToRefs(useCommonStore());
+const { sidebarOpenClass } = storeToRefs(useLoginStore());
 </script>

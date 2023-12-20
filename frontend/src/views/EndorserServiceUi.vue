@@ -1,7 +1,7 @@
 <template>
   <div class="alert-container">
     <Alert class="z-2" />
-    <AppLayout v-if="tenantReady" />
+    <AppLayout v-if="isLoggedIn" />
     <Login v-else />
   </div>
 </template>
@@ -11,9 +11,9 @@ import Alert from '@/components/notifications/Alert.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Login from '@/components/Login.vue';
 import { storeToRefs } from 'pinia';
-import { useTenantStore } from '@/store';
+import { useLoginStore } from '@/store';
 
-const { tenantReady } = storeToRefs(useTenantStore());
+const { isLoggedIn } = storeToRefs(useLoginStore());
 </script>
 
 <style scoped lang="scss">
