@@ -1,14 +1,15 @@
-export { useConfigStore } from './configStore';
-export { useConnectionStore } from './connectionStore';
 export { useTenantStore } from './tenantStore';
 export { useTokenStore } from './tokenStore';
 
 export { useInnkeeperTokenStore } from './innkeeper/innkeeperTokenStore';
-export { useInnkeeperTenantsStore } from './innkeeper/innkeeperTenantsStore';
-export { useInnkeeperOidcStore } from './innkeeper/innkeeperOidcStore';
+export { useLoginStore } from './loginStore';
 
 // OIDC
 export { useOidcStore } from './oidc/oidcStore';
 
-// Endorser
+// Endorser Service API calls
 export { useAllowanceStore } from './allowanceStore';
+export { useConnectionStore } from './connectionStore';
+export { useTransactionStore } from './transactionStore';
+
+export { useConfigStore } from './configStore';

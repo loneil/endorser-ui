@@ -1,4 +1,4 @@
-import { useAcapyApi } from '../acapyApi';
+import { useEndorserServiceApi } from '../endorserServiceApi';
 import { AxiosRequestConfig } from 'axios';
 import { Ref } from 'vue';
 
@@ -10,8 +10,16 @@ export async function fetchList<T>(
   params: object = {},
   options?: object
 ) {
-  const acapyApi = useAcapyApi();
-  return fetchListFromAPI(acapyApi, url, list, error, loading, params, options);
+  const endorserServiceApi = useEndorserServiceApi();
+  return fetchListFromAPI(
+    endorserServiceApi,
+    url,
+    list,
+    error,
+    loading,
+    params,
+    options
+  );
 }
 
 export async function fetchListFromEndorserAPI<T>(

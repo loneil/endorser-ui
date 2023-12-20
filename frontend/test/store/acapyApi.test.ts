@@ -1,7 +1,7 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { useAcapyApi } from '@/store/acapyApi';
+import { useEndorserServiceApi } from '@/store/endorserServiceApi';
 import {
   restHandlersAuthorizationError,
   restHandlersUnknownError,
@@ -18,10 +18,10 @@ tenantStore.clearTenant = vi.fn();
 
 let store: any;
 
-describe('acapyApi', () => {
+describe('endorserServiceApi', () => {
   beforeEach(async () => {
     setActivePinia(createPinia());
-    store = useAcapyApi();
+    store = useEndorserServiceApi();
   });
 
   describe('Successful API calls', () => {

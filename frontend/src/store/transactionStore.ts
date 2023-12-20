@@ -1,13 +1,13 @@
 import { API_PATH } from '@/helpers/constants';
 
 import { defineStore } from 'pinia';
-import {  ref, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import { useEndorserServiceApi } from './endorserServiceApi';
 import { fetchListFromEndorserAPI } from './utils';
 
-export const useConnectionStore = defineStore('connectionStore', () => {
+export const useTransactionStore = defineStore('transactionStore', () => {
   // state
-  const connections: Ref<any[]> = ref([]);
+  const transactions: Ref<any[]> = ref([]);
   const loading: Ref<boolean> = ref(false);
   const error: Ref<string | null> = ref(null);
 
@@ -18,25 +18,25 @@ export const useConnectionStore = defineStore('connectionStore', () => {
   // grab the tenant api
   const endorserServiceApi = useEndorserServiceApi();
 
-  async function listConnections() {
+  async function listTransactions() {
     return fetchListFromEndorserAPI(
       endorserServiceApi,
-      API_PATH.ENDORSER_CONNECTIONS,
-      'connections',
-      connections,
+      API_PATH.ENDORSE_TRANSACTIONS,
+      'transactions',
+      transactions,
       error,
       loading
     );
   }
 
   return {
-    connections,
+    transactions,
     loading,
     error,
-    listConnections,
+    listTransactions,
   };
 });
 
 export default {
-  useConnectionStore,
+  useTransactionStore,
 };

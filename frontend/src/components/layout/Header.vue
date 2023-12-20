@@ -12,7 +12,7 @@
 
     <template #end>
       <LocaleSwitcher />
-      <InnkeeperBadge />
+      <EndorserBadge />
       <SessionTimer />
     </template>
   </Toolbar>
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import Toolbar from 'primevue/toolbar';
-import InnkeeperBadge from '@/components/innkeeper/InnkeeperBadge.vue';
+import EndorserBadge from '@/components/layout/EndorserBadge.vue';
 import LocaleSwitcher from '@/components/common/LocaleSwitcher.vue';
 import SessionTimer from '@/components/common/SessionTimer.vue';
 

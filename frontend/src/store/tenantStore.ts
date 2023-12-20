@@ -1,9 +1,12 @@
-import { AdminConfig, EndorserInfo } from '@/types/acapyApi/acapyInterface';
+import {
+  AdminConfig,
+  EndorserInfo,
+} from '@/types/endorserServiceApi/acapyInterface';
 
 import { API_PATH } from '@/helpers/constants';
 import { defineStore, storeToRefs } from 'pinia';
 import { computed, ref, Ref } from 'vue';
-import { useAcapyApi } from './acapyApi';
+import { useEndorserServiceApi } from './endorserServiceApi';
 import { useTokenStore } from './tokenStore';
 import { fetchItem } from './utils/fetchItem';
 
@@ -25,7 +28,7 @@ export const useTenantStore = defineStore('tenant', () => {
   const tenantDefaultSettings: any = ref(null);
 
   const { token } = storeToRefs(useTokenStore());
-  const acapyApi = useAcapyApi();
+  const endorserServiceApi = useEndorserServiceApi();
 
   // getters
   const tenantReady = computed(() => {
@@ -112,7 +115,7 @@ export const useTenantStore = defineStore('tenant', () => {
     error.value = null;
     loadingTrack.value = true;
 
-    await acapyApi
+    await endorserServiceApi
       .getHttp(API_PATH.TENANT_ENDORSER_CONNECTION)
       .then((res: any) => {
         endorserConnection.value = res.data;
@@ -149,7 +152,7 @@ export const useTenantStore = defineStore('tenant', () => {
     error.value = null;
     loadingTrack.value = true;
 
-    await acapyApi
+    await endorserServiceApi
       .getHttp(API_PATH.TENANT_ENDORSER_INFO)
       .then((res: any) => {
         endorserInfo.value = res.data;
@@ -182,7 +185,7 @@ export const useTenantStore = defineStore('tenant', () => {
 
     try {
       publicDidRegistrationProgress.value = 'Connecting to Endorser';
-      const res = await acapyApi.postHttp(
+      const res = await endorserServiceApi.postHttp(
         API_PATH.TENANT_ENDORSER_CONNECTION,
         {}
       );
@@ -228,7 +231,7 @@ export const useTenantStore = defineStore('tenant', () => {
 
   async function setWriteLedger(ledger_id: string) {
     console.log('> tenantStore.setWriteLedger');
-    const res = await acapyApi.putHttp(
+    const res = await endorserServiceApi.putHttp(
       API_PATH.TENANT_SWITCH_WRITE_LEDGER(ledger_id)
     );
     if (!res.data.write_ledger) {
@@ -245,7 +248,9 @@ export const useTenantStore = defineStore('tenant', () => {
     let retries = 0;
     publicDidRegistrationProgress.value = 'Waiting for transaction to complete';
     for (;;) {
-      const pRes = await acapyApi.getHttp(API_PATH.TRANSACTION_GET(txnId));
+      const pRes = await endorserServiceApi.getHttp(
+        API_PATH.TRANSACTION_GET(txnId)
+      );
       if (pRes.data.state === 'transaction_acked') {
         publicDidRegistrationProgress.value = '';
         return;
@@ -266,7 +271,10 @@ export const useTenantStore = defineStore('tenant', () => {
       'Waiting for Endorser connection to become active';
     loadingIssuance.value = true;
     for (;;) {
-      const res = await acapyApi.getHttp(API_PATH.CONNECTION(connId), {});
+      const res = await endorserServiceApi.getHttp(
+        API_PATH.CONNECTION(connId),
+        {}
+      );
       endorserConnection.value = res.data;
       if (endorserConnection.value.state === 'active') {
         console.log(`Endorser connection ${connId} state is active`);
@@ -291,10 +299,13 @@ export const useTenantStore = defineStore('tenant', () => {
     try {
       // Create a DID
       publicDidRegistrationProgress.value = 'Creating DID';
-      const aRes = await acapyApi.postHttp(API_PATH.WALLET_DID_CREATE, {
-        method: 'sov',
-        options: { key_type: 'ed25519' },
-      });
+      const aRes = await endorserServiceApi.postHttp(
+        API_PATH.WALLET_DID_CREATE,
+        {
+          method: 'sov',
+          options: { key_type: 'ed25519' },
+        }
+      );
       if (!aRes.data.result) {
         throw Error('No result in create DID response');
       }
@@ -305,7 +316,7 @@ export const useTenantStore = defineStore('tenant', () => {
       const alias = tenant.value.tenant_name || tenant.value.wallet_id;
       // Register the DID
       publicDidRegistrationProgress.value = 'Registering the DID';
-      const bRes = await acapyApi.postHttp(
+      const bRes = await endorserServiceApi.postHttp(
         `${API_PATH.TENANT_REGISTER_PUBLIC_DID}?did=${did}&verkey=${verkey}&alias=${alias}`,
         {}
       );
@@ -317,7 +328,7 @@ export const useTenantStore = defineStore('tenant', () => {
       const txnId = bRes.data.txn.transaction_id;
       waitForTxnCompletion(txnId);
       // Verify DID is posted on correct ledger
-      const cRes = await acapyApi.getHttp(
+      const cRes = await endorserServiceApi.getHttp(
         `${API_PATH.TENANT_GET_VERKEY_POSTED_DID}?did=${did}`,
         {}
       );
@@ -341,7 +352,7 @@ export const useTenantStore = defineStore('tenant', () => {
       // Assign the public DID
       console.log(`calling /wallet/did/public with ${postedDID}`);
       publicDidRegistrationProgress.value = 'Assigning the public DID';
-      const dRes = await acapyApi.postHttp(
+      const dRes = await endorserServiceApi.postHttp(
         `${API_PATH.WALLET_DID_PUBLIC}?did=${postedDID}`,
         {}
       );
@@ -350,7 +361,7 @@ export const useTenantStore = defineStore('tenant', () => {
       const payload = {
         ledger_id: writeLedger.value.ledger_id,
       };
-      const eRes = await acapyApi.putHttp(
+      const eRes = await endorserServiceApi.putHttp(
         API_PATH.TENANT_CONFIG_SET_LEDGER_ID,
         payload
       );
@@ -375,7 +386,7 @@ export const useTenantStore = defineStore('tenant', () => {
     error.value = null;
     loading.value = true;
 
-    await acapyApi
+    await endorserServiceApi
       .getHttp(API_PATH.TENANT_WALLET)
       .then((res: any) => {
         tenantWallet.value = res.data;
@@ -421,7 +432,7 @@ export const useTenantStore = defineStore('tenant', () => {
     error.value = null;
     loading.value = true;
 
-    await acapyApi
+    await endorserServiceApi
       .putHttp(API_PATH.TENANT_WALLET, payload)
       .then((res) => {
         console.log(res);
@@ -456,7 +467,7 @@ export const useTenantStore = defineStore('tenant', () => {
     loadingIssuance.value = true;
 
     try {
-      await acapyApi.postHttp(API_PATH.LEDGER_TAA_ACCEPT, payload);
+      await endorserServiceApi.postHttp(API_PATH.LEDGER_TAA_ACCEPT, payload);
       await getTaa();
     } catch (err) {
       error.value = err;

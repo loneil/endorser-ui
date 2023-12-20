@@ -7,12 +7,12 @@ import {
   TenantAuthenticationsApiResponse,
   TenantConfig,
   TenantRecord,
-} from '@/types/acapyApi/acapyInterface';
+} from '@/types/endorserServiceApi/acapyInterface';
 
 import { defineStore, storeToRefs } from 'pinia';
 import { computed, ref, Ref } from 'vue';
 import axios from 'axios';
-import { useAcapyApi } from '../acapyApi';
+import { useEndorserServiceApi } from '../endorserServiceApi';
 import {
   fetchListFromAPI,
   fetchListFromEndorserAPI,
@@ -87,7 +87,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
 
   async function listConnections() {
     return fetchListFromEndorserAPI(
-      acapyApi,
+      endorserServiceApi,
       API_PATH.ENDORSER_CONNECTIONS,
       'connections',
       connections,
@@ -97,7 +97,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
   }
   async function listTransactions() {
     return fetchListFromEndorserAPI(
-      acapyApi,
+      endorserServiceApi,
       API_PATH.ENDORSE_TRANSACTIONS,
       'transactions',
       transactions,
@@ -109,7 +109,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
   // actions
 
   // (using both things temporarily)
-  const acapyApi = useAcapyApi();
+  const endorserServiceApi = useEndorserServiceApi();
 
   // A different axios instance with a basepath just of the tenant UI backend
   const backendApi = axios.create({
@@ -118,7 +118,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
 
   async function listApiKeys() {
     return fetchListFromAPI(
-      acapyApi,
+      endorserServiceApi,
       API_PATH.INNKEEPER_AUTHENTICATIONS_API,
       apiKeys,
       error,
@@ -138,7 +138,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
 
   async function listTenants() {
     return fetchListFromEndorserAPI(
-      acapyApi,
+      endorserServiceApi,
       API_PATH.ENDORSER_CONNECTIONS,
       'connections',
       tenants,
@@ -149,7 +149,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
 
   async function listReservations() {
     return fetchListFromAPI(
-      acapyApi,
+      endorserServiceApi,
       API_PATH.INNKEEPER_RESERVATIONS,
       reservations,
       error,
@@ -174,7 +174,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
 
     // Don't keep this as state, make sure the password doesn't hang around in memory
     let approveResponse: ApproveResponse = {};
-    await acapyApi
+    await endorserServiceApi
       .putHttp(API_PATH.INNKEEPER_RESERVATIONS_APPROVE(id), payload)
       .then((res) => {
         approveResponse = res.data;
@@ -220,7 +220,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
 
     // Don't keep this as state, make sure the password doesn't hang around in memory
     let refreshResponse: ApproveResponse = {};
-    await acapyApi
+    await endorserServiceApi
       .putHttp(API_PATH.INNKEEPER_RESERVATIONS_REFRESH_PASSWORD(id), payload)
       .then((res) => {
         refreshResponse = res.data;
@@ -263,7 +263,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
     error.value = null;
     loading.value = true;
 
-    await acapyApi
+    await endorserServiceApi
       .putHttp(API_PATH.INNKEEPER_RESERVATIONS_DENY(id), payload)
       .then((res) => {
         console.log(res);
@@ -300,7 +300,10 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
     loading.value = true;
 
     try {
-      await acapyApi.putHttp(API_PATH.INNKEEPER_TENANT_CONFIG(id), payload);
+      await endorserServiceApi.putHttp(
+        API_PATH.INNKEEPER_TENANT_CONFIG(id),
+        payload
+      );
       // Reload the tenants list after updating
       await listTenants();
     } catch (err: any) {
@@ -319,7 +322,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
   async function deleteTenant(id: string) {
     loading.value = true;
     try {
-      await acapyApi.deleteHttp(API_PATH.INNKEEPER_TENANT(id));
+      await endorserServiceApi.deleteHttp(API_PATH.INNKEEPER_TENANT(id));
       await listTenants();
     } catch (err: any) {
       error.value = err;
@@ -339,7 +342,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
     let createResponse: TenantAuthenticationsApiResponse | undefined;
     try {
       createResponse = (
-        await acapyApi.postHttp(
+        await endorserServiceApi.postHttp(
           API_PATH.INNKEEPER_AUTHENTICATIONS_API_POST,
           payload
         )
@@ -365,7 +368,7 @@ export const useInnkeeperTenantsStore = defineStore('innkeeperTenants', () => {
   async function deleteApiKey(id: string) {
     loading.value = true;
     try {
-      await acapyApi.deleteHttp(
+      await endorserServiceApi.deleteHttp(
         API_PATH.INNKEEPER_AUTHENTICATIONS_API_RECORD(id)
       );
       listApiKeys();

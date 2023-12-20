@@ -11,9 +11,6 @@ export { store as tokenStore } from './token';
 export { store as verifierStore } from './verifier';
 
 // Innkeeper
-export { store as innkeeperTenantsStore } from './innkeeper/tenants';
 export { store as innkeeperTokenStore } from './innkeeper/token';
-export { store as innkeeperOidcStore } from './innkeeper/oidc';
+export { store as loginStore } from './login';
 
-// Oidc
-export { store as oidcStore } from './oidc/oidc';

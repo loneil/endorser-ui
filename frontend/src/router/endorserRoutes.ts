@@ -7,6 +7,7 @@ import AllowDid from '@/views/AllowDid.vue';
 import AllowSchema from '@/views/AllowSchema.vue';
 import AllowConfig from '@/views/AllowConfig.vue';
 import Home from '@/views/Home.vue';
+import ServerConfig from '@/views/ServerConfig.vue';
 
 const endorserRoutes = [
   {
@@ -15,11 +16,15 @@ const endorserRoutes = [
     component: EndorserServiceUi,
     children: [
       { path: 'home', name: 'Home', component: Home },
+
+      // Connections
       {
         path: 'connections',
         name: 'Connections',
         component: Connections,
       },
+
+      // Transactions
       {
         path: 'transactions',
         name: 'Transactions',
@@ -51,6 +56,13 @@ const endorserRoutes = [
             component: AllowConfig,
           },
         ],
+      },
+
+      // Server Config
+      {
+        path: 'server',
+        name: 'ServerConfig',
+        component: ServerConfig,
       },
 
       // About

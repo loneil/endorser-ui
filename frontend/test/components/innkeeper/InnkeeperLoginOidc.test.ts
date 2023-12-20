@@ -4,7 +4,7 @@ import PrimeVue from 'primevue/config';
 import { describe, expect, test, vi } from 'vitest';
 
 import InnkeeperLoginOidc from '@/components/innkeeper/InnkeeperLoginOidc.vue';
-import { useInnkeeperOidcStore } from '@/store';
+import { useLoginStore } from '@/store';
 
 const mountLoginOidc = () =>
   mount(InnkeeperLoginOidc, {
@@ -23,7 +23,7 @@ describe('InnkeeperLoginOidc', async () => {
 
   test('button click triggers login', async () => {
     const wrapper = mountLoginOidc();
-    const store = useInnkeeperOidcStore();
+    const store = useLoginStore();
     await wrapper.getComponent({ name: 'Button' }).trigger('click');
 
     expect(store.login).toHaveBeenCalled();
@@ -33,7 +33,7 @@ describe('InnkeeperLoginOidc', async () => {
     const wrapper = mountLoginOidc();
     const wrapperVm = wrapper.vm as unknown as typeof InnkeeperLoginOidc;
     const toastSpy = vi.spyOn(wrapperVm.toast, 'error');
-    const store = useInnkeeperOidcStore();
+    const store = useLoginStore();
     store.login = vi.fn().mockRejectedValue('fail');
     await wrapper.getComponent({ name: 'Button' }).trigger('click');
 

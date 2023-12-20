@@ -18,20 +18,20 @@ import { onMounted } from 'vue';
 import VueJsonPretty from 'vue-json-pretty';
 import { useToast } from 'vue-toastification';
 // Components
-import { useInnkeeperTenantsStore } from '@/store';
-import MainCardContent from '../../layout/mainCard/MainCardContent.vue';
+import { useConfigStore } from '@/store';
+import MainCardContent from '@/components/layout/mainCard/MainCardContent.vue';
 
 const toast = useToast();
 
-const innkeeperTenantsStore = useInnkeeperTenantsStore();
-const { loading, serverConfig } = storeToRefs(useInnkeeperTenantsStore());
+const configStore = useConfigStore();
+const { loading, serverConfig } = storeToRefs(useConfigStore());
 
 onMounted(async () => {
   loadConfig();
 });
 
 const loadConfig = async () => {
-  innkeeperTenantsStore.getServerConfig().catch((err: string) => {
+  configStore.getServerConfig().catch((err: string) => {
     console.error(err);
     toast.error(`Failure: ${err}`);
   });

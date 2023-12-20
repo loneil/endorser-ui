@@ -12,7 +12,7 @@ import axios from 'axios';
 import { useConfigStore } from './configStore';
 import { useTenantStore, useTokenStore } from './index';
 
-export const useAcapyApi = defineStore('acapyApi', () => {
+export const useEndorserServiceApi = defineStore('endorserServiceApi', () => {
   const tokenStore = useTokenStore();
   const tenantStore = useTenantStore();
   const { config } = storeToRefs(useConfigStore());
@@ -27,12 +27,12 @@ export const useAcapyApi = defineStore('acapyApi', () => {
 
   // setup our tenant api calls to use the configured proxy path "prefix"
   // now callers can just put in the actual traction api url
-  const acapyApi = createAxios({
+  const endorserServiceApi = createAxios({
     baseURL: '/api/endorser',
   });
 
   // need to add authorization before we make traction tenant requests...
-  acapyApi.interceptors.request.use(
+  endorserServiceApi.interceptors.request.use(
     async (dataConfig: any) => {
       // if the consumer provides an auth header (even blank) in options, then use it, otherwise default to the token
       let auth = `Bearer ${tokenStore.token}`;
@@ -53,18 +53,18 @@ export const useAcapyApi = defineStore('acapyApi', () => {
       return result;
     },
     async (error: any) => {
-      console.error('acapyApi.request.error');
+      console.error('endorserServiceApi.request.error');
       console.error(error);
       return Promise.reject(error);
     }
   );
 
-  acapyApi.interceptors.response.use(
+  endorserServiceApi.interceptors.response.use(
     (response) => {
       return response;
     },
     (error: any) => {
-      console.error('acapyApi.response.error');
+      console.error('endorserServiceApi.response.error');
       console.error(error);
       if (error.response.status === 401) {
         tokenStore.clearToken();
@@ -85,7 +85,7 @@ export const useAcapyApi = defineStore('acapyApi', () => {
     method: string,
     options = {}
   ): Promise<any> {
-    return acapyApi({
+    return endorserServiceApi({
       method: method.toUpperCase(),
       url,
       ...options,
@@ -162,5 +162,5 @@ export const useAcapyApi = defineStore('acapyApi', () => {
 });
 
 export default {
-  useAcapyApi,
+  useEndorserServiceApi,
 };

@@ -90,7 +90,7 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'vue-toastification';
 
 // State
-import { useInnkeeperTenantsStore } from '@/store';
+import { useConnectionStore } from '@/store';
 import { storeToRefs } from 'pinia';
 // Other components
 import { TABLE_OPT, API_PATH } from '@/helpers/constants';
@@ -103,13 +103,13 @@ import MainCardContent from '@/components/layout/mainCard/MainCardContent.vue';
 const confirm = useConfirm();
 const toast = useToast();
 
-const innkeeperTenantsStore = useInnkeeperTenantsStore();
+const connectionStore = useConnectionStore();
 const showDeleted = ref(false);
 
 // Populating the Table
-const { loading, connections } = storeToRefs(useInnkeeperTenantsStore());
+const { loading, connections } = storeToRefs(useConnectionStore());
 const loadTable = () => {
-  innkeeperTenantsStore.listConnections().catch((err: string) => {
+  connectionStore.listConnections().catch((err: string) => {
     console.error(err);
     toast.error(`Failure: ${err}`);
   });
@@ -135,7 +135,7 @@ const accept = (event: any, connection_id: string) => {
   });
 };
 const doAccept = (connectionId: string) => {
-  // innkeeperTenantsStore
+  // connectionStore
   //   .acceptConnection(connectionId)
   //   .then(() => {
   //     toast.success(`Connection successfully accepted`);
@@ -158,7 +158,7 @@ const reject = (event: any, connection_id: string) => {
   });
 };
 const doReject = (connectionId: string) => {
-  // innkeeperTenantsStore
+  // connectionStore
   //   .rejectConnection(connectionId)
   //   .then(() => {
   //     toast.success(`Connection successfully rejected`);

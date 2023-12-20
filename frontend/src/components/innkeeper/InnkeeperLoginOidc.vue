@@ -20,7 +20,7 @@
 <script setup lang="ts">
 // State
 import { ref } from 'vue';
-import { useInnkeeperOidcStore } from '@/store';
+import { useLoginStore } from '@/store';
 import { storeToRefs } from 'pinia';
 // PrimeVue/etc
 import Button from 'primevue/button';
@@ -28,8 +28,8 @@ import Dropdown from 'primevue/dropdown';
 import { useToast } from 'vue-toastification';
 const toast = useToast();
 
-const innkeeperOidcStore = useInnkeeperOidcStore();
-const { loading, error } = storeToRefs(useInnkeeperOidcStore());
+const loginStore = useLoginStore();
+const { loading, error } = storeToRefs(useLoginStore());
 
 // Selector
 
@@ -43,7 +43,7 @@ const ledgers = ref([
 // OIDC Login
 const oidcLogin = async () => {
   try {
-    await innkeeperOidcStore.login();
+    await loginStore.login();
   } catch (error: any) {
     toast.error(`Failure: ${error}`);
   }

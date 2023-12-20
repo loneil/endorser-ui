@@ -1,4 +1,4 @@
-import { useAcapyApi } from '../acapyApi';
+import { useEndorserServiceApi } from '../endorserServiceApi';
 import { AxiosRequestConfig } from 'axios';
 import { Ref } from 'vue';
 
@@ -9,7 +9,7 @@ export async function fetchItem<T>(
   loading: Ref<boolean>,
   params: object = {}
 ): Promise<T | object | null> {
-  const acapyApi = useAcapyApi();
+  const endorserServiceApi = useEndorserServiceApi();
   let dataUrl = url;
   if (id) {
     // Normalize if the caller supplies a trailing slash or not
@@ -19,7 +19,7 @@ export async function fetchItem<T>(
   error.value = null;
   let result = null;
 
-  await acapyApi
+  await endorserServiceApi
     .getHttp(dataUrl, params)
     .then((res: AxiosRequestConfig): void => {
       if (res?.data?.result) {

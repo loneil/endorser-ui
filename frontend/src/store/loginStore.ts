@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { defineStore, storeToRefs } from 'pinia';
-import { ref } from 'vue';
-import { useConfigStore } from '../configStore';
+import { Ref, ref } from 'vue';
+import { useConfigStore } from './configStore';
 import { UserManager, UserManagerSettings } from 'oidc-client-ts';
 import { API_PATH } from '@/helpers/constants';
-import { useTokenStore } from '../tokenStore';
+import { useTokenStore } from './tokenStore';
+import { useRouter } from 'vue-router';
 
-export const useInnkeeperOidcStore = defineStore('innkeeperOidcStore', () => {
+export const useLoginStore = defineStore('loginStore', () => {
   // other stores
   const { config } = storeToRefs(useConfigStore());
   const { token } = storeToRefs(useTokenStore());
@@ -53,7 +54,10 @@ export const useInnkeeperOidcStore = defineStore('innkeeperOidcStore', () => {
       if (token.value) localStorage.setItem('token-innkeeper', token.value);
 
       // strip the oidc return params
-      window.history.pushState({}, document.title, '/');
+      window.history.pushState({}, document.title, '/home');
+      // push the router to the home page
+      const router = useRouter();
+      router.push('/home');
     } catch (err: any) {
       error.value = err;
     } finally {
@@ -62,26 +66,28 @@ export const useInnkeeperOidcStore = defineStore('innkeeperOidcStore', () => {
   });
 
   // state
-  const loading: any = ref(false);
   const error: any = ref(null);
+  const ledger: Ref<string> = ref('BCOVRIN-TEST');
+  const loading: any = ref(false);
   const user: any = ref(null);
 
   // getters
 
   // actions
-  async function login() {
+  async function login(ledgerId: string) {
     loading.value = true;
     return _userManager.signinRedirect();
   }
 
   return {
-    loading,
     error,
-    login,
+    ledger,
+    loading,
     user,
+    login,
   };
 });
 
 export default {
-  useInnkeeperOidcStore,
+  useLoginStore,
 };

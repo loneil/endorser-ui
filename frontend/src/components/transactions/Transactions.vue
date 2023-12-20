@@ -123,7 +123,7 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'vue-toastification';
 
 // State
-import { useInnkeeperTenantsStore } from '@/store';
+import { useTransactionStore } from '@/store';
 import { storeToRefs } from 'pinia';
 // Other components
 import { TABLE_OPT, API_PATH } from '@/helpers/constants';
@@ -135,13 +135,13 @@ import EditTransaction from './editTransaction/EditTransaction.vue';
 const confirm = useConfirm();
 const toast = useToast();
 
-const innkeeperTenantsStore = useInnkeeperTenantsStore();
+const transactionStore = useTransactionStore();
 const showDeleted = ref(false);
 
 // Populating the Table
-const { loading, transactions } = storeToRefs(useInnkeeperTenantsStore());
+const { loading, transactions } = storeToRefs(useTransactionStore());
 const loadTable = () => {
-  innkeeperTenantsStore.listTransactions().catch((err: string) => {
+  transactionStore.listTransactions().catch((err: string) => {
     console.error(err);
     toast.error(`Failure: ${err}`);
   });
@@ -167,7 +167,7 @@ const accept = (event: any, connectionId: string) => {
   });
 };
 const doAccept = (connectionId: string) => {
-  // innkeeperTenantsStore
+  // transactionStore
   //   .acceptTransaction(connectionId)
   //   .then(() => {
   //     toast.success(`Transaction successfully accepted`);
@@ -190,7 +190,7 @@ const reject = (event: any, connectionId: string) => {
   });
 };
 const doReject = (connectionId: string) => {
-  // innkeeperTenantsStore
+  // transactionStore
   //   .rejectTransaction(connectionId)
   //   .then(() => {
   //     toast.success(`Transaction successfully rejected`);

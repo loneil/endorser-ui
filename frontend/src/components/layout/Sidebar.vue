@@ -1,7 +1,7 @@
 <template>
   <div class="traction-sidebar innkeeper-sidebar">
     <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
-    <h1 class="sidebar-app-title">Endorser</h1>
+    <h1 class="sidebar-app-title">{{ ledger }}</h1>
     <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
     <h1 class="sidebar-app-title small">E</h1>
     <PanelMenu :model="items" class="mt-5">
@@ -17,6 +17,11 @@ import { ref } from 'vue';
 import PanelMenu from 'primevue/panelmenu';
 import { useI18n } from 'vue-i18n';
 import PanelMenuItemLink from '@/components/common/PanelMenuItemLink.vue';
+import { storeToRefs } from 'pinia';
+import { useLoginStore } from '@/store';
+
+const loginStore = useLoginStore();
+const { ledger } = storeToRefs(useLoginStore());
 
 const { t } = useI18n();
 
@@ -25,7 +30,7 @@ const items = ref([
   {
     label: 'Home',
     icon: 'pi pi-fw pi-home',
-    route: '/',
+    route: '/home',
   },
   {
     label: t('connections.connections'),

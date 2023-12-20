@@ -2,10 +2,10 @@ import { defineStore } from 'pinia';
 import { ref, Ref } from 'vue';
 import { fetchItem, fetchListFromEndorserAPI } from './utils';
 import { API_PATH } from '@/helpers/constants';
-import { useAcapyApi } from './acapyApi';
+import { useEndorserServiceApi } from './endorserServiceApi';
 
 export const useAllowanceStore = defineStore('allowance', () => {
-  const acapyApi = useAcapyApi();
+  const endorserServiceApi = useEndorserServiceApi();
 
   // state
   const credDefs: Ref<any[]> = ref([]);
@@ -19,7 +19,7 @@ export const useAllowanceStore = defineStore('allowance', () => {
   // actions
   async function listCredDefs() {
     return fetchListFromEndorserAPI<any>(
-      acapyApi,
+      endorserServiceApi,
       API_PATH.ALLOW_CREDENTIAL_DEFINITION,
       'connections',
       credDefs,
@@ -29,7 +29,7 @@ export const useAllowanceStore = defineStore('allowance', () => {
   }
   async function listDids() {
     return fetchListFromEndorserAPI<any>(
-      acapyApi,
+      endorserServiceApi,
       API_PATH.ALLOW_PUBLISH_DID,
       'connections',
       credDefs,
@@ -39,7 +39,7 @@ export const useAllowanceStore = defineStore('allowance', () => {
   }
   async function listSchemas() {
     return fetchListFromEndorserAPI<any>(
-      acapyApi,
+      endorserServiceApi,
       API_PATH.ALLOW_SCHEMA,
       'connections',
       credDefs,

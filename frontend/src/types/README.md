@@ -31,7 +31,8 @@ The `swagger-typescript-api` package works with the older spec and validation is
 2. On your local machine anywhere, navigate to the location of the downloaded JSON and use `npx` to run the `swagger-typescript-api` library. Version `12.0.3` was used at this time of writing. We don't want to generate a http client class (since we have our own) so use `no-client` just to get types.
 
    `npx swagger-typescript-api -p swagger.json -n acapyInterface.ts --no-client`
-3. Add the resultant file to frontend/src/types/acapyApi
+
+3. Add the resultant file to frontend/src/types/endorserServiceApi
 
 ## Other interfaces/types/enums
 

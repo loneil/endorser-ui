@@ -11,7 +11,7 @@ export const useInnkeeperTokenStore = defineStore(
   () => {
     const { config } = storeToRefs(useConfigStore());
     const { token } = storeToRefs(useTokenStore());
-    // A raw api call without using the interceptors from the acapyApiTenantStore
+    // A raw api call without using the interceptors from the endorserServiceApiTenantStore
     const api = axios.create({
       baseURL: config.value.frontend.tenantProxyPath,
     });

@@ -1,4 +1,4 @@
-// import { IndyCredInfo, V10CredentialExchange } from '@/types/acapyApi/acapyInterface';
+// import { IndyCredInfo, V10CredentialExchange } from '@/types/endorserServiceApi/acapyInterface';
 // export interface CombinedCredentialAndExchange {
 //   credential?: IndyCredInfo;
 //   credentialExchange: V10CredentialExchange;
@@ -9,7 +9,7 @@ import {
   CredDefStorageRecord,
   SchemaStorageRecord as AcapySchemaStorageRecord,
   Schema,
-} from './acapyApi/acapyInterface';
+} from './endorserServiceApi/acapyInterface';
 
 export interface GetItem {
   item?: any;
