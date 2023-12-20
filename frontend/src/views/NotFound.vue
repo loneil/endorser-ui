@@ -2,7 +2,7 @@
   <div class="text-center">
     <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
     <h1>{{ $t('httpStatus.404.code') }}: {{ $t('httpStatus.404.status') }}</h1>
-    <router-link :to="{ name: 'Dashboard' }">
+    <router-link :to="{ name: 'Home' }">
       <Button :label="$t('dashboard.backToDashboard')" class="p-button-link" />
     </router-link>
   </div>

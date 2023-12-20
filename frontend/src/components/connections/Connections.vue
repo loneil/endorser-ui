@@ -11,7 +11,6 @@
       :paginator="true"
       :rows="TABLE_OPT.ROWS_DEFAULT"
       :rows-per-page-options="TABLE_OPT.ROWS_OPTIONS"
-      :global-filter-fields="['alias']"
       selection-mode="single"
       data-key="connection_id"
       sort-field="created_at"
@@ -20,227 +19,163 @@
     >
       <template #header>
         <div class="flex justify-content-between">
-          <div class="flex justify-content-start">
-            <AcceptInvitation />
-            <DidExchange class="ml-4" />
-          </div>
+          <div class="flex justify-content-start"></div>
           <div class="flex justify-content-end">
-            <span class="p-input-icon-left">
-              <i class="pi pi-search" />
-              <InputText
-                v-model="filter.alias.value"
-                :placeholder="$t('connect.connections.search')"
-              />
-            </span>
+            <div class="container">
+              <span class="p-input-icon-left container-item">
+                <i class="pi pi-search ml-0" />
+                <InputText
+                  v-model="filter.global.value"
+                  :placeholder="$t('tenants.search')"
+                />
+              </span>
+            </div>
           </div>
         </div>
       </template>
       <template #empty>{{ $t('common.noRecordsFound') }}</template>
       <template #loading>{{ $t('common.loading') }}</template>
       <Column :expander="true" header-style="width: 3rem" />
-      <Column :sortable="false" :header="$t('common.actions')">
+      <Column header="Actions" class="action-col">
         <template #body="{ data }">
-          <MessageConnection
-            :connection-id="data.connection_id"
-            :connection-name="data.alias"
+          <Button
+            v-if="data.state === 'request'"
+            title="Accept Connection Request"
+            icon="pi pi-check-circle"
+            class="p-button-rounded p-button-icon-only p-button-text text-green-500"
+            :class="{ accepted: data.state === 'credential_acked' }"
+            @click="accept($event, data.connection_id)"
           />
           <Button
-            title="Delete Connection"
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-icon-only p-button-text"
-            :disabled="deleteDisabled(data.alias)"
-            @click="deleteConnection($event, data.connection_id)"
+            v-if="data.state === 'request'"
+            title="Reject Connection Request"
+            icon="pi pi-times"
+            class="p-button-rounded p-button-icon-only p-button-text text-red-500"
+            @click="reject($event, data.connection_id)"
           />
-          <EditConnection :connection-id="data.connection_id" />
-        </template>
-      </Column>
-      <Column
-        :sortable="true"
-        field="alias"
-        :header="$t('common.alias')"
-        filter-field="alias"
-        :show-filter-match-modes="false"
-      >
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            v-model="filterModel.value"
-            type="text"
-            class="p-column-filter"
-            placeholder="Search By Alias"
-            @input="filterCallback()"
+          <EditConnection
+            v-if="data.state !== 'request'"
+            :connection-id="data.connection_id"
+          />
+          <ConfigConnection
+            v-if="data.state !== 'request'"
+            :connection-id="data.connection_id"
           />
         </template>
       </Column>
-      <Column
-        :sortable="true"
-        field="their_label"
-        filter-field="their_label"
-        :header="$t('connect.table.theirLabel')"
-        :show-filter-match-modes="false"
-      >
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            v-model="filterModel.value"
-            type="text"
-            class="p-column-filter"
-            placeholder="Search By Label"
-            @input="filterCallback()"
-          />
-        </template>
-      </Column>
-      <Column
-        :sortable="true"
-        field="state"
-        :header="$t('common.status')"
-        filter-field="state"
-        :show-filter-match-modes="false"
-      >
+      <Column :sortable="true" field="their_label" header="Their Label" />
+      <Column :sortable="true" field="state" header="State">
         <template #body="{ data }">
           <StatusChip :status="data.state" />
         </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            v-model="filterModel.value"
-            type="text"
-            class="p-column-filter"
-            placeholder="Search By State"
-            @input="filterCallback()"
-          />
-        </template>
       </Column>
-      <Column
-        :sortable="true"
-        field="created"
-        :header="$t('connect.table.createdAt')"
-        filter-field="created"
-        :show-filter-match-modes="false"
-      >
-        <template #body="{ data }">
-          {{ data.created }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText
-            v-model="filterModel.value"
-            type="text"
-            class="p-column-filter"
-            placeholder="Search By Date"
-            @input="filterCallback()"
-          />
-        </template>
-      </Column>
+      <Column :sortable="true" field="author_status" header="Author Status" />
+      <Column :sortable="true" field="endorse_status" header="Endorse Status" />
+      <Column :sortable="true" field="created" header="Created At" />
       <template #expansion="{ data }">
-        <RowExpandData :id="data.connection_id" :url="API_PATH.CONNECTIONS" />
-        <hr class="expand-divider" />
-        <RowExpandData
-          :url="API_PATH.CONNECTIONS_ENDPOINTS(data.connection_id)"
-          label="View Connection Endpoints"
-        />
-        <hr class="expand-divider" />
-        <RowExpandData
-          :url="API_PATH.CONNECTIONS_METADATA(data.connection_id)"
-          label="View Connection Metadata"
-        />
+        <RowExpandData :id="data.connection_id" :url="API_PATH.ENDORSER_CONNECTION" />
       </template>
     </DataTable>
   </MainCardContent>
 </template>
 
 <script setup lang="ts">
-// Vue
-import { onMounted, ref, Ref, computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
-// PrimeVue
 import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import InputText from 'primevue/inputtext';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'vue-toastification';
+
 // State
-import { useConnectionStore, useTenantStore } from '@/store';
+import { useInnkeeperTenantsStore } from '@/store';
 import { storeToRefs } from 'pinia';
 // Other components
-import AcceptInvitation from './acceptInvitation/AcceptInvitation.vue';
-import DidExchange from './didExchange/DidExchange.vue';
-import EditConnection from './editConnection/EditConnection.vue';
-import MainCardContent from '../layout/mainCard/MainCardContent.vue';
-import MessageConnection from './messageConnection/MessageConnection.vue';
-import RowExpandData from '../common/RowExpandData.vue';
-import StatusChip from '../common/StatusChip.vue';
 import { TABLE_OPT, API_PATH } from '@/helpers/constants';
-import { formatDateLong } from '@/helpers';
-
+import { formatConnections } from '@/helpers/tableFormatters';
+import ConfigConnection from './editConnection/ConfigureConnection.vue';
+import EditConnection from './editConnection/EditConnection.vue';
+import StatusChip from '@/components/common/StatusChip.vue';
+import RowExpandData from '@/components/common/RowExpandData.vue';
+import MainCardContent from '@/components/layout/mainCard/MainCardContent.vue';
 const confirm = useConfirm();
 const toast = useToast();
 
-// State
-const connectionStore = useConnectionStore();
-const tenantStore = useTenantStore();
+const innkeeperTenantsStore = useInnkeeperTenantsStore();
+const showDeleted = ref(false);
 
-const { loading, filteredConnections } = storeToRefs(useConnectionStore());
-const { endorserInfo } = storeToRefs(useTenantStore());
-
-const loadTable = async () => {
-  connectionStore.listConnections().catch((err) => {
+// Populating the Table
+const { loading, connections } = storeToRefs(useInnkeeperTenantsStore());
+const loadTable = () => {
+  innkeeperTenantsStore.listConnections().catch((err: string) => {
     console.error(err);
     toast.error(`Failure: ${err}`);
   });
 };
 
-onMounted(async () => {
-  // So we can check endorser connection
-  tenantStore.getEndorserInfo();
-  // Load your connection list
+// Formatting the Connection table row
+const formattedConnections = computed(() => formatConnections(connections));
+
+onMounted(() => {
   loadTable();
 });
 
-// Deleting a connection
-const deleteConnection = (event: any, id: string) => {
+// Actions for a connection row
+const accept = (event: any, connection_id: string) => {
   confirm.require({
     target: event.currentTarget,
-    message: 'Are you sure you want to delete this connection?',
+    message: 'Are you sure you want to accept this connection?',
     header: 'Confirmation',
     icon: 'pi pi-exclamation-triangle',
     accept: () => {
-      doDelete(id);
+      doAccept(connection_id);
     },
   });
 };
-const doDelete = (id: string) => {
-  connectionStore
-    .deleteConnection(id)
-    .then(() => {
-      toast.success(`Connection successfully deleted`);
-    })
-    .catch((err) => {
-      console.error(err);
-      toast.error(`Failure: ${err}`);
-    });
-};
-// Can't delete if it's endorser
-const deleteDisabled = (connectionAlias: string) => {
-  return (
-    endorserInfo.value != null &&
-    endorserInfo.value.endorser_name === connectionAlias
-  );
+const doAccept = (connectionId: string) => {
+  // innkeeperTenantsStore
+  //   .acceptConnection(connectionId)
+  //   .then(() => {
+  //     toast.success(`Connection successfully accepted`);
+  //   })
+  //   .catch((err: string) => {
+  //     console.error(err);
+  //     toast.error(`Failure: ${err}`);
+  //   });
 };
 
-// The formatted table row
-const formattedConnections: Ref<any[]> = computed(() =>
-  filteredConnections.value.map((conn) => ({
-    connection_id: conn.connection_id,
-    alias: conn.alias,
-    their_label: conn.their_label,
-    state: conn.state,
-    created: formatDateLong(conn.created_at as string),
-    created_at: conn.created_at,
-  }))
-);
-// necessary for expanding rows, we don't do anything with this
-const expandedRows = ref([]);
+const reject = (event: any, connection_id: string) => {
+  confirm.require({
+    target: event.currentTarget,
+    message: 'Are you sure you want to reject this connection?',
+    header: 'Confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+      doReject(connection_id);
+    },
+  });
+};
+const doReject = (connectionId: string) => {
+  // innkeeperTenantsStore
+  //   .rejectConnection(connectionId)
+  //   .then(() => {
+  //     toast.success(`Connection successfully rejected`);
+  //   })
+  //   .catch((err: string) => {
+  //     console.error(err);
+  //     toast.error(`Failure: ${err}`);
+  //   });
+};
 
+// Filter for search
 const filter = ref({
-  alias: {
+  global: {
+    value: null,
+    matchMode: FilterMatchMode.CONTAINS,
+  },
+  tenant_name: {
     value: null,
     matchMode: FilterMatchMode.CONTAINS,
   },
@@ -248,13 +183,37 @@ const filter = ref({
     value: null,
     matchMode: FilterMatchMode.CONTAINS,
   },
-  their_label: {
+  deleted: {
     value: null,
     matchMode: FilterMatchMode.CONTAINS,
   },
-  state: {
+  curr_ledger_id: {
     value: null,
     matchMode: FilterMatchMode.CONTAINS,
   },
 });
+
+// necessary for expanding rows, we don't do anything with this
+const expandedRows = ref([]);
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+}
+.container-item {
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.deleted-btn {
+  height: 2.625rem;
+  background-color: #ef4444;
+  border: 1px solid #ef4444;
+  color: white;
+  border-radius: 10px;
+  width: 50%;
+  font-weight: 600;
+}
+</style>

@@ -1,11 +1,9 @@
 <template>
-  <div class="traction-sidebar">
-    <h1 class="sidebar-app-title">
-      <ProgressSpinner v-if="loading" />
-      <span v-if="tenant">{{ tenant.tenant_name }}</span>
-    </h1>
+  <div class="traction-sidebar innkeeper-sidebar">
     <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
-    <h1 class="sidebar-app-title small">T</h1>
+    <h1 class="sidebar-app-title">Endorser</h1>
+    <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
+    <h1 class="sidebar-app-title small">E</h1>
     <PanelMenu :model="items" class="mt-5">
       <template #item="{ item }">
         <PanelMenuItemLink :item="item" />
@@ -17,91 +15,73 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import PanelMenu from 'primevue/panelmenu';
-import ProgressSpinner from 'primevue/progressspinner';
-import { storeToRefs } from 'pinia';
-import { useTenantStore } from '../../store';
 import { useI18n } from 'vue-i18n';
-import PanelMenuItemLink from '../common/PanelMenuItemLink.vue';
+import PanelMenuItemLink from '@/components/common/PanelMenuItemLink.vue';
 
 const { t } = useI18n();
 
-// tenant should be loaded by login...
-const { tenant, loading } = storeToRefs(useTenantStore());
-
+const ROOT = '/';
 const items = ref([
   {
-    label: t('dashboard.dashboard'),
-    icon: 'pi pi-fw pi-chart-bar',
-    route: '/dashboard',
+    label: 'Home',
+    icon: 'pi pi-fw pi-home',
+    route: '/',
   },
   {
-    label: t('connect.connections.connections'),
+    label: t('connections.connections'),
     icon: 'pi pi-fw pi-users',
+    route: ROOT + 'connections',
+  },
+  {
+    label: t('transactions.transactions'),
+    icon: 'pi pi-fw pi-dollar',
+    route: ROOT + 'transactions',
+  },
+  {
+    label: t('allow.allow'),
+    icon: 'pi pi-fw pi-check-square',
     items: [
       {
         // Icons are manadatory for mobile layout
-        label: t('connect.connections.connections'),
-        icon: 'pi pi-fw pi-users',
-        route: '/connections',
+        label: t('allow.did.did'),
+        icon: 'pi pi-fw pi-globe',
+        route: ROOT + 'allow/did',
       },
       {
-        label: t('connect.invitations.invitations'),
-        icon: 'pi pi-fw pi-send',
-        route: '/connections/invitations',
-      },
-    ],
-  },
-
-  {
-    label: t('issue.issuance'),
-    icon: 'pi pi-fw pi-credit-card',
-    route: '/issuance/credentials',
-  },
-
-  {
-    label: t('verify.verification'),
-    icon: 'pi pi-fw pi-check-square',
-    route: '/verification/verifications',
-  },
-
-  {
-    label: t('common.credentials'),
-    icon: 'pi pi-fw pi-wallet',
-    route: '/holder/credentials',
-  },
-
-  {
-    label: t('configuration.configuration'),
-    icon: 'pi pi-fw pi-file',
-    items: [
-      {
-        label: t('configuration.schemas.storage'),
-        icon: 'pi pi-fw pi-book',
-        route: '/schemas',
+        label: t('allow.schema.schema'),
+        icon: 'pi pi-fw pi-sitemap',
+        route: ROOT + 'allow/schema',
       },
       {
-        label: t('configuration.credentialDefinitions.storage'),
+        label: t('allow.credDef.credDef'),
         icon: 'pi pi-fw pi-id-card',
-        route: '/credentialDefinitions',
+        route: ROOT + 'allow/credDef',
       },
       {
-        label: t('configuration.oca.oca'),
-        icon: 'pi pi-fw pi-compass',
-        route: '/oca',
+        label: t('allow.config.config'),
+        icon: 'pi pi-fw pi-file-edit',
+        route: ROOT + 'allow/config',
       },
     ],
   },
-
   {
-    label: t('messages.messages'),
-    icon: 'pi pi-fw pi-envelope',
-    route: '/messages/recent',
+    label: t('serverConfig.serverConfig'),
+    icon: 'pi pi-fw pi-wrench',
+    route: ROOT + 'server',
   },
-
-  {
-    label: t('about.about'),
-    icon: 'pi pi-fw pi-question-circle',
-    route: '/about',
-  },
+  // {
+  //   label: t('about.about'),
+  //   icon: 'pi pi-fw pi-question-circle',
+  //   route: ROOT + 'about',
+  // },
 ]);
 </script>
+<style scoped lang="scss">
+.sidebar-app-title.small {
+  position: relative;
+  left: -0.5rem;
+  width: 3.2rem;
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+</style>

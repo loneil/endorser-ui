@@ -47,7 +47,7 @@ const items = [
   {
     label: 'Logout',
     class: 'logout-menu-item',
-    url: '/innkeeper/logout',
+    url: '/logout',
   },
 ];
 </script>

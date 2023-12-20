@@ -80,9 +80,7 @@ const createCountDownIfNecessary = () => {
 const logoutOnTimeout = () => {
   if (inactivityCount >= timeoutSeconds) {
     localStorage.setItem('inactivity-timeout', 'true');
-    if (route.path.includes('innkeeper'))
-      window.location.href = '/innkeeper/logout';
-    else window.location.href = '/logout';
+    window.location.href = '/logout';
   }
 };
 

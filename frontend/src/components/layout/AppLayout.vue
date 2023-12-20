@@ -1,8 +1,7 @@
 <template>
   <Suspense>
-    <!-- the suspense tag is so we can await any of these components.
-         sidebar loads the tenant async -->
-    <div class="layout-container">
+    <!-- the suspense tag is so we can await any of these components-->
+    <div class="layout-container innkeeper-layout">
       <nav class="layout-sidebar" :class="sidebarOpenClass">
         <Sidebar />
       </nav>
@@ -15,17 +14,12 @@
             <router-view />
           </MainCard>
         </main>
-        <footer class="bottom-0 layout-footer">
-          <Footer />
-        </footer>
       </div>
     </div>
   </Suspense>
 </template>
 
 <script setup lang="ts">
-// Layout Components
-import Footer from './Footer.vue';
 import Header from './Header.vue';
 import MainCard from './mainCard/MainCard.vue';
 import Sidebar from './Sidebar.vue';

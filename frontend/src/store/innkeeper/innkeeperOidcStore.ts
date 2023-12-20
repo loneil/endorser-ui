@@ -15,10 +15,10 @@ export const useInnkeeperOidcStore = defineStore('innkeeperOidcStore', () => {
   const _settings: UserManagerSettings = {
     authority: config.value.frontend.oidc.authority,
     client_id: config.value.frontend.oidc.client,
-    redirect_uri: `${window.location.origin}/innkeeper`,
+    redirect_uri: `${window.location.origin}/`,
     response_type: 'code',
     automaticSilentRenew: false, // don't need to renew for our needs at this point
-    post_logout_redirect_uri: `${window.location.origin}/innkeeper`,
+    post_logout_redirect_uri: `${window.location.origin}/`,
     loadUserInfo: true,
     extraQueryParams: { kc_idp_hint: 'idir' },
   };
@@ -53,7 +53,7 @@ export const useInnkeeperOidcStore = defineStore('innkeeperOidcStore', () => {
       if (token.value) localStorage.setItem('token-innkeeper', token.value);
 
       // strip the oidc return params
-      window.history.pushState({}, document.title, '/innkeeper');
+      window.history.pushState({}, document.title, '/');
     } catch (err: any) {
       error.value = err;
     } finally {

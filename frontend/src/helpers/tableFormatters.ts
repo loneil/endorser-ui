@@ -1,52 +1,6 @@
-import { SchemaStorageRecord } from '@/types';
-import {
-  CredDefStorageRecord,
-  CredentialDefinition,
-  TenantRecord,
-} from '@/types/acapyApi/acapyInterface';
 import { Ref } from 'vue';
 import { formatDateLong } from '.';
 
-export interface FormattedCredDef extends CredDefStorageRecord {
-  created: string;
-}
-export interface FormattedSchema extends SchemaStorageRecord {
-  created: string;
-  credentialDefinitions: CredentialDefinition[];
-}
-
-export interface FormattedConnectionRecord extends TenantRecord {
-  created: string;
-  updated: string;
-}
-
-export const formatSchemaList = (
-  schemaList: Ref<SchemaStorageRecord[]>
-): FormattedSchema[] =>
-  schemaList.value.map((schema: any) => ({
-    schema: {
-      name: schema.schema.name,
-      version: schema.schema.version,
-      attrNames: schema.schema.attrNames.sort(),
-    },
-    schema_id: schema.schema_id,
-    created: formatDateLong(schema.created_at),
-    created_at: schema.created_at,
-    credentialDefinitions: schema.credentialDefinitions.sort(),
-  }));
-
-export const formatStoredCredDefs = (
-  storedCredDefs: Ref<CredDefStorageRecord[]>
-): FormattedCredDef[] =>
-  storedCredDefs.value.map((credDef: any) => ({
-    cred_def_id: credDef.cred_def_id,
-    schema_id: credDef.schema_id,
-    support_revocation: credDef.support_revocation,
-    created_at: credDef.created_at,
-    created: formatDateLong(credDef.created_at),
-  }));
-
-// Keep below
 export const formatConnections = (connections: Ref<any[]>): any[] =>
   connections.value.map((connection: any) => ({
     connection_id: connection.connection_id,
@@ -56,6 +10,37 @@ export const formatConnections = (connections: Ref<any[]>): any[] =>
     endorse_status: connection.endorse_status,
     created: formatDateLong(connection.created_at),
     updated: formatDateLong(connection.updated_at),
+  }));
+
+export const formatCredDefs = (creds: Ref<any[]>): any[] =>
+  creds.value.map((cred: any) => ({
+    issuer_did: cred.issuer_did,
+    author_did: cred.author_did,
+    schema_name: cred.schema_name,
+    version: cred.version,
+    tag: cred.tag,
+    rev_reg_def: cred.rev_reg_def,
+    rev_reg_entry: cred.rev_reg_entry,
+    allowed_cred_def_id: cred.allowed_cred_def_id,
+    created: formatDateLong(cred.created_at),
+    updated: formatDateLong(cred.updated_at),
+  }));
+
+export const formatDids = (dids: Ref<any[]>): any[] =>
+  dids.value.map((did: any) => ({
+    registered_did: did.registered_did,
+    created: formatDateLong(did.created_at),
+    updated: formatDateLong(did.updated_at),
+  }));
+
+export const formatSchemas = (schemas: Ref<any[]>): any[] =>
+  schemas.value.map((schema: any) => ({
+    author_did: schema.author_did,
+    schema_name: schema.schema_name,
+    version: schema.version,
+    allowed_schema_id: schema.allowed_schema_id,
+    created: formatDateLong(schema.created_at),
+    updated: formatDateLong(schema.updated_at),
   }));
 
 export const formatTransactions = (transactions: Ref<any[]>): any[] =>

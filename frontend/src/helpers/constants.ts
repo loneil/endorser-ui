@@ -9,23 +9,21 @@ export const MESSAGES = {
 };
 
 export const API_PATH = {
-
   ADMIN_CONFIG: '/admin/config',
+
+  ALLOW_CREDENTIAL_DEFINITION: '/allow/credential-definition',
+  ALLOW_PUBLISH_DID: '/allow/publish-did',
+  ALLOW_SCHEMA: '/allow/schema',
+
   ENDORSER_CONNECTION: '/connections/',
   ENDORSER_CONNECTIONS: '/connections/?page_size=100&page_num=1',
   ENDORSE_TRANSACTION: '/endorse/transactions/',
   ENDORSE_TRANSACTIONS: '/endorse/transactions?page_size=100&page_num=1',
 
-
-
   // The tenant UI backend
   CONFIG: '/config',
   EMAIL_CONFIRMATION: '/email/reservationConfirmation',
   EMAIL_STATUS: '/email/reservationStatus',
-
-
-
-
 
   // TODO: Align these urls
   OIDC_ENDORSER_LOGIN: '/api/endorserLogin',

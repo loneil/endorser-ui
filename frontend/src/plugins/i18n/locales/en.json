@@ -5,12 +5,15 @@
       "config": "Config Files"
     },
     "credDef": {
+      "allow": "Allow Credential Definitions",
       "credDef": "Credential Definition"
     },
     "did": {
+      "allow": "Allow DIDs",
       "did": "DID"
     },
     "schema": {
+      "allow": "Allow Schemas",
       "schema": "Schema"
     }
   },
@@ -77,6 +80,7 @@
   },
   "common": {
     "actions": "Actions",
+    "add": "Add",
     "alias": "Alias",
     "apiKey": "API Key",
     "byName": "Search By Name",
@@ -539,7 +543,7 @@
   },
   "tenants": {
     "checkIn": "Check-In Tenant",
-    "search": "Search Tenants",
+    "search": "Search Table",
     "settings": {
       "canBecomeIssuer": "Tenant can become issuer, i.e connect to endorser and register DID",
       "canConnectEndorser": "Tenant allowed to connect to Endorser",

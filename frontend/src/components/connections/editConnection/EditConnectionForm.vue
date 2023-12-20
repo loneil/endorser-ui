@@ -6,7 +6,7 @@
     <!-- Alias -->
     <div class="field">
       <label for="alias" :class="{ 'p-error': v$.alias.$invalid && submitted }">
-        {{ $t('common.alias') }}
+        {{ $t('common.alias') }} *
       </label>
       <InputText
         v-model="v$.alias.$model"
@@ -14,6 +14,24 @@
         :class="{ 'p-invalid': v$.alias.$invalid && submitted }"
         type="text"
         name="alias"
+        autofocus
+      />
+      <small v-if="v$.alias.$invalid && submitted" class="p-error">
+        {{ v$.alias.required.$message }}
+      </small>
+    </div>
+
+    <!-- DID -->
+    <div class="field">
+      <label for="did" :class="{ 'p-error': v$.did.$invalid && submitted }">
+        Public DID
+      </label>
+      <InputText
+        v-model="v$.did.$model"
+        class="w-full"
+        :class="{ 'p-invalid': v$.did.$invalid && submitted }"
+        type="text"
+        name="did"
         autofocus
       />
       <small v-if="v$.alias.$invalid && submitted" class="p-error">
@@ -35,7 +53,7 @@
 // Vue
 import { onMounted, reactive, ref, PropType } from 'vue';
 // State/etc
-import { useConnectionStore } from '../../../store';
+// import { useConnectionStore } from '@/store';
 import useGetItem from '@/composables/useGetItem';
 import { formatDateLong } from '@/helpers';
 import { API_PATH } from '@/helpers/constants';
@@ -55,16 +73,18 @@ const props = defineProps({
   },
 });
 
-const connectionStore = useConnectionStore();
+// const connectionStore = useConnectionStore();
 const emit = defineEmits(['closed', 'success']);
 const toast = useToast();
 
 // Validation
 const formFields = reactive({
   alias: '',
+  did: '',
 });
 const rules = {
   alias: { required },
+  did: {},
 };
 const v$ = useVuelidate(rules, formFields);
 
@@ -77,10 +97,10 @@ const handleSubmit = async (isFormValid: boolean) => {
   }
 
   try {
-    await connectionStore.updateConnection(
-      props.connectionId,
-      formFields.alias
-    );
+    // await connectionStore.updateConnection(
+    //   props.connectionId,
+    //   formFields.alias
+    // );
     emit('success');
     // close up on success
     emit('closed');
