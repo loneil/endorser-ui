@@ -21,7 +21,7 @@ export const useConnectionStore = defineStore('connectionStore', () => {
   async function listConnections() {
     return fetchListFromEndorserAPI(
       endorserServiceApi,
-      API_PATH.ENDORSER_CONNECTIONS,
+      API_PATH.CONNECTIONS,
       'connections',
       connections,
       error,

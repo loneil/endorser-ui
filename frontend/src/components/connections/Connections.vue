@@ -73,7 +73,7 @@
       <Column :sortable="true" field="endorse_status" header="Endorse Status" />
       <Column :sortable="true" field="created" header="Created At" />
       <template #expansion="{ data }">
-        <RowExpandData :id="data.connection_id" :url="API_PATH.ENDORSER_CONNECTION" />
+        <RowExpandData :id="data.connection_id" :url="API_PATH.CONNECTION" />
       </template>
     </DataTable>
   </MainCardContent>

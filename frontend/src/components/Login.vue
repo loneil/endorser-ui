@@ -7,6 +7,14 @@
 
           <h1 class="text-center">Endorser Service UI</h1>
         </div>
+        <!-- <form>
+  <div class="field">
+    <label for="username">Username</label>
+    <InputText id="username"  aria-describedby="username-help" />
+    <small id="username-help"
+      >Enter your username to reset your password.</small
+    >
+  </div></form> -->
 
         <div class="py-8">
           <LoginOidc class="mt-0" />
@@ -21,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+import InputText from 'primevue/inputtext';
 import LoginOidc from './LoginOidc.vue';
 import SessionTimeoutModal from '@/components/common/SessionTimeoutModal.vue';
 </script>

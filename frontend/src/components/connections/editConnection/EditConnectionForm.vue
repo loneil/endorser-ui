@@ -1,7 +1,16 @@
 <template>
+  <div class="field">
+    <label for="username">Username</label>
+    <InputText id="username"  aria-describedby="username-help" />
+    <small id="username-help"
+      >Enter your username to reset your password.</small
+    >
+  </div>
+
   <div v-if="loading" class="flex justify-content-center">
     <ProgressSpinner />
   </div>
+
   <form v-else @submit.prevent="handleSubmit(!v$.$invalid)">
     <!-- Alias -->
     <div class="field">
@@ -113,7 +122,7 @@ const handleSubmit = async (isFormValid: boolean) => {
 };
 
 // Get the latest details about this connection when opening
-const { loading, item, fetchItem } = useGetItem(API_PATH.CONNECTIONS);
+const { loading, item, fetchItem } = useGetItem(API_PATH.CONNECTION);
 onMounted(async () => {
   try {
     await fetchItem(props.connectionId);
