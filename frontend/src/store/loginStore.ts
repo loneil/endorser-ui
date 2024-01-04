@@ -5,7 +5,7 @@ import { useConfigStore } from './configStore';
 import { UserManager, UserManagerSettings } from 'oidc-client-ts';
 import { API_PATH } from '@/helpers/constants';
 import { useTokenStore } from './tokenStore';
-import  router from '../router/index';
+import router from '../router/index';
 
 export const useLoginStore = defineStore('loginStore', () => {
   // other stores
@@ -29,7 +29,8 @@ export const useLoginStore = defineStore('loginStore', () => {
     .signinRedirectCallback()
     .then((usr) => {
       loading.value = true;
-      console.log('signed in', usr);
+      ledger.value = usr.state as string;
+      console.log(`OIDC signed in, selected ${usr.state}`, usr);
     })
     .catch((err) => {
       console.error(err);
@@ -47,11 +48,12 @@ export const useLoginStore = defineStore('loginStore', () => {
         headers: { Authorization: `Bearer ${usr?.access_token}` },
       };
       const response: any = await axios.get(
-        API_PATH.OIDC_ENDORSER_LOGIN,
+        API_PATH.OIDC_ENDORSER_LOGIN(ledger.value),
         loginCfg
       );
       token.value = response.data.access_token;
-      if (token.value) localStorage.setItem('token-endorser-service', token.value);
+      if (token.value)
+        localStorage.setItem('token-endorser-service', token.value);
 
       // strip the oidc return params
       window.history.pushState({}, document.title, '/');
@@ -68,7 +70,7 @@ export const useLoginStore = defineStore('loginStore', () => {
   // state
   const cardExpanded = ref(false);
   const error: any = ref(null);
-  const ledger: Ref<string> = ref('BCOVRIN-TEST');
+  const ledger: Ref<string> = ref('');
   const loading: any = ref(false);
   const sidebarOpen: Ref<boolean | null> = ref(null);
   const user: any = ref(null);
@@ -93,7 +95,9 @@ export const useLoginStore = defineStore('loginStore', () => {
   // actions
   async function login(ledgerId: string) {
     loading.value = true;
-    return _userManager.signinRedirect();
+    return _userManager.signinRedirect({
+      state: ledgerId,
+    });
   }
 
   return {

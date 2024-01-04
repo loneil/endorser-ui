@@ -6,7 +6,14 @@
     },
     "credDef": {
       "allow": "Allow Credential Definitions",
-      "credDef": "Credential Definition"
+      "credDef": "Credential Definition",
+      "did": "Author Did",
+      "issuerDid": "Issuer DID",
+      "name": "Schema Name",
+      "revRegDefinition": "Revocation Registry Definition",
+      "revRegEntry": "Revocation Registry Entry",
+      "tag": "Tag",
+      "version": "Version"
     },
     "did": {
       "allow": "Allow DIDs",
@@ -14,7 +21,10 @@
     },
     "schema": {
       "allow": "Allow Schemas",
-      "schema": "Schema"
+      "did": "Author Did",
+      "name": "Schema Name",
+      "schema": "Schema",
+      "version": "Version"
     }
   },
 
@@ -29,8 +39,6 @@
     "search": "Search Transactions",
     "transactions": "Transactions"
   },
-  
-
 
   "about": {
     "about": "About",

@@ -128,7 +128,7 @@ const handleSubmit = async (isFormValid: boolean) => {
 };
 
 // Get the latest details about this connection when opening
-const { loading, item, fetchItem } = useGetItem(API_PATH.CONNECTIONS);
+const { loading, item, fetchItem } = useGetItem(API_PATH.CONNECTION);
 onMounted(async () => {
   try {
     await fetchItem(props.connectionId);

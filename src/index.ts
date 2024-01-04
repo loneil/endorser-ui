@@ -18,7 +18,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 // Host the static frontend assets
 app.use("/favicon.ico", (_, res) => {
   res.redirect("/favicon.ico");
@@ -32,7 +31,9 @@ function _setupConfig() {
     frontend: config.get("frontend"),
     image: config.get("image"),
     server: {
-      tractionUrl: config.get("server.tractionUrl"),
+      endorsersIds: (config.get("server.endorsers") as any[]).map(
+        (endorser: any) => endorser.id
+      ),
     },
   };
 }
@@ -50,7 +51,7 @@ app.use("/config", (_, res, next) => {
 app.use(APIROOT, router);
 
 // Proxy any api/endorser calls over to Endorser Service
-app.use(`${APIROOT}/endorser`, endorserProxy);
+app.use(`${APIROOT}/:endorserId/endorser`, endorserProxy);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

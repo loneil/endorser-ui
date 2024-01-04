@@ -9,12 +9,11 @@
  */
 import { defineStore, storeToRefs } from 'pinia';
 import axios from 'axios';
-import { useConfigStore } from './configStore';
-import { useTokenStore } from './index';
+import { useLoginStore, useTokenStore } from './index';
 
 export const useEndorserServiceApi = defineStore('endorserServiceApi', () => {
   const tokenStore = useTokenStore();
-  const { config } = storeToRefs(useConfigStore());
+  const { ledger } = storeToRefs(useLoginStore());
 
   function createAxios(options = {}) {
     console.log('creating axios instance...');
@@ -27,7 +26,7 @@ export const useEndorserServiceApi = defineStore('endorserServiceApi', () => {
   // setup our tenant api calls to use the configured proxy path "prefix"
   // now callers can just put in the actual traction api url
   const endorserServiceApi = createAxios({
-    baseURL: '/api/endorser',
+    baseURL: `/api/${ledger.value}/endorser/`,
   });
 
   // need to add authorization before we make traction tenant requests...

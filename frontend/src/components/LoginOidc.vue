@@ -2,7 +2,6 @@
   <Dropdown
     v-model="selectedLedger"
     :options="ledgers"
-    optionLabel="name"
     placeholder="Select Endorser Service"
     class="w-full"
   />
@@ -20,7 +19,7 @@
 <script setup lang="ts">
 // State
 import { ref } from 'vue';
-import { useLoginStore } from '@/store';
+import { useConfigStore, useLoginStore } from '@/store';
 import { storeToRefs } from 'pinia';
 // PrimeVue/etc
 import Button from 'primevue/button';
@@ -30,20 +29,16 @@ const toast = useToast();
 
 const loginStore = useLoginStore();
 const { loading, error } = storeToRefs(useLoginStore());
+const { config } = storeToRefs(useConfigStore());
 
 // Selector
-
 const selectedLedger = ref();
-const ledgers = ref([
-    { name: 'bcovrin-test', code: 'NY' },
-    { name: 'candy-test', code: 'RM' },
-    { name: 'sovrin-test', code: 'LDN' }
-]);
+const ledgers = ref(config.value.server.endorsersIds);
 
 // OIDC Login
 const oidcLogin = async () => {
   try {
-    await loginStore.login(selectedLedger.value.name);
+    await loginStore.login(selectedLedger.value);
   } catch (error: any) {
     toast.error(`Failure: ${error}`);
   }

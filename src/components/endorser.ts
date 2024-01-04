@@ -1,20 +1,24 @@
 import axios from "axios";
 import config from "config";
 
+const ENDORSER_CONFIG_LIST: Array<any> = config.get("server.endorsers");
+
 /**
  * @function login
  * Use the configured Endorser Admin secret to get the token
  * @returns {string} The inkeeper token
  */
-export const login = async () => {
-  const loginUrl =
-    "https://bcovrin-endorser-service-dev.apps.silver.devops.gov.bc.ca/endorser/token";
+export const login = async (endorserId: string) => {
+  const endorserConfig = ENDORSER_CONFIG_LIST.find(
+    (endorser) => endorser.id === endorserId
+  );
+  const loginUrl = `${endorserConfig.url}/endorser/token`;
   const payload = {
     grant_type: "",
     client_id: "",
     client_secret: "",
-    username: "endorser-admin",
-    password: "64UlLKcErNvVeCuFmL8BsxfnlLkLcfb/f8Ex/6DVQXo=",
+    username: endorserConfig.user,
+    password: endorserConfig.password,
     scope: "",
   };
   const res = await axios.post(loginUrl, payload, {

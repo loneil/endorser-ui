@@ -20,7 +20,7 @@
       <template #header>
         <div class="flex justify-content-between">
           <div class="flex justify-content-start">
-            <AddDid @success="loadTable" />
+            <AddSchema @success="loadTable" />
           </div>
           <div class="flex justify-content-end">
             <div class="container">
@@ -79,7 +79,7 @@ import { FilterMatchMode } from 'primevue/api';
 import { storeToRefs } from 'pinia';
 import { useToast } from 'vue-toastification';
 // Components
-import AddDid from './add/AddDid.vue';
+import AddSchema from './add/AddSchema.vue';
 import DeleteSchema from './delete/DeleteSchema.vue';
 import MainCardContent from '@/components/layout/mainCard/MainCardContent.vue';
 import { TABLE_OPT, API_PATH } from '@/helpers/constants';

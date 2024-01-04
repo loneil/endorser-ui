@@ -24,12 +24,15 @@ export const API_PATH = {
 
   ENDORSE_TRANSACTION: '/endorse/transactions/',
   ENDORSE_TRANSACTIONS: '/endorse/transactions?page_size=100&page_num=1',
-  ENDORSE_TRANSACTIONS_ENDORSE: (tranId: string) => `/endorse/transactions/${tranId}/endorse`,
-  ENDORSE_TRANSACTIONS_REJECT: (tranId: string) => `/endorse/transactions/${tranId}/reject`,
+  ENDORSE_TRANSACTIONS_ENDORSE: (tranId: string) =>
+    `/endorse/transactions/${tranId}/endorse`,
+  ENDORSE_TRANSACTIONS_REJECT: (tranId: string) =>
+    `/endorse/transactions/${tranId}/reject`,
 
   // The application backend
   CONFIG: '/config',
-  OIDC_ENDORSER_LOGIN: '/api/endorserLogin',
+  OIDC_ENDORSER_LOGIN: (endorserId: string) =>
+    `/api/${endorserId}/endorserLogin`,
 };
 
 // json editor config

@@ -57,10 +57,12 @@
       "realm": "digitaltrust-citz",
       "roleName": "innkeeper"
     },
-    "innkeeper": {
-      "user": "innkeeper",
-      "key": "change-me"
-    },
+    "endorsers": [{
+      "id": "bcovrin-dev",
+      "url": "https://bcovrin-endorser-service-dev.apps.silver.devops.gov.bc.ca",
+      "user": "REDACTED",
+      "password": "REDACTED"
+    }],
     "smtp": {
       "server": "apps.smtp.gov.bc.ca",
       "port": 25,
