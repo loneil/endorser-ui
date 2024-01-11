@@ -51,23 +51,30 @@
     "logLevel": "http",
     "port": "8080",
     "staticFiles": "../../frontend/dist",
-    "tractionUrl": "http://localhost:5100",
     "oidc": {
       "jwksUri": "https://dev.loginproxy.gov.bc.ca/auth/realms/digitaltrust-citz/protocol/openid-connect/certs",
       "realm": "digitaltrust-citz",
       "roleName": "innkeeper"
     },
-    "endorsers": [{
-      "id": "bcovrin-dev",
-      "url": "https://bcovrin-endorser-service-dev.apps.silver.devops.gov.bc.ca",
-      "user": "REDACTED",
-      "password": "REDACTED"
-    }],
-    "smtp": {
-      "server": "apps.smtp.gov.bc.ca",
-      "port": 25,
-      "senderAddress": "DoNotReplyTraction@gov.bc.ca",
-      "innkeeperInbox": "lucas.o'neil@gov.bc.ca"
-    }
+    "endorsers": [
+      {
+        "id": "bcovrin-test",
+        "url": "https://bcovrin-endorser-service-test.apps.silver.devops.gov.bc.ca",
+        "user": "REDACTED",
+        "password": "REDACTED"
+      },
+      {
+        "id": "candy-test",
+        "url": "https://aries-endorser-service-test.apps.silver.devops.gov.bc.ca",
+        "user": "REDACTED",
+        "password": "REDACTED"
+      },
+      {
+        "id": "sovrin-test",
+        "url": "https://sovrin-endorser-agent-admin-test.apps.silver.devops.gov.bc.ca",
+        "user": "REDACTED",
+        "password": "REDACTED"
+      }
+    ]
   }
 }

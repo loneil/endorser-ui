@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, Ref } from 'vue';
-import { fetchItem, fetchListFromEndorserAPI } from './utils';
+import { fetchListFromEndorserAPI } from './utils';
 import { API_PATH } from '@/helpers/constants';
 import { useEndorserServiceApi } from './endorserServiceApi';
 
@@ -17,6 +17,48 @@ export const useAllowanceStore = defineStore('allowance', () => {
   // getters
 
   // actions
+  async function createDid(did: string) {
+    console.log('> connectionStore.createDid');
+    error.value = null;
+    loading.value = true;
+
+    try {
+      await endorserServiceApi.postHttp(
+        `${API_PATH.ALLOW_PUBLISH_DID}/${did}`,
+        {}
+      );
+    } catch (err: any) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+
+    if (error.value != null) {
+      throw error.value;
+    }
+  }
+
+  async function deleteDid(did: string) {
+    console.log('> connectionStore.deleteDid');
+    error.value = null;
+    loading.value = true;
+
+    try {
+      await endorserServiceApi.deleteHttp(
+        `${API_PATH.ALLOW_PUBLISH_DID}/${did}`
+      );
+      listDids();
+    } catch (err: any) {
+      error.value = err;
+    } finally {
+      loading.value = false;
+    }
+
+    if (error.value != null) {
+      throw error.value;
+    }
+  }
+
   async function listCredDefs() {
     return fetchListFromEndorserAPI<any>(
       endorserServiceApi,
@@ -32,7 +74,7 @@ export const useAllowanceStore = defineStore('allowance', () => {
       endorserServiceApi,
       API_PATH.ALLOW_PUBLISH_DID,
       'connections',
-      credDefs,
+      dids,
       error,
       loading
     );
@@ -42,7 +84,7 @@ export const useAllowanceStore = defineStore('allowance', () => {
       endorserServiceApi,
       API_PATH.ALLOW_SCHEMA,
       'connections',
-      credDefs,
+      schemas,
       error,
       loading
     );
@@ -54,6 +96,8 @@ export const useAllowanceStore = defineStore('allowance', () => {
     error,
     loading,
     schemas,
+    createDid,
+    deleteDid,
     listCredDefs,
     listDids,
     listSchemas,

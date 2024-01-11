@@ -5,7 +5,7 @@
         v-model="ingredient"
         inputId="ingredient1"
         name="pizza"
-        value="Cheese"
+        value="123"
       />
       <label for="ingredient1" class="ml-2">Append Configuration</label>
     </div>
@@ -15,10 +15,14 @@
         v-model="ingredient"
         inputId="ingredient1"
         name="pizza"
-        value="Cheese"
+        value="abc"
       />
       <label for="ingredient1" class="ml-2">Set Configuration</label>
     </div>
+
+    <Message v-if="ingredient === 'abc'" severity="warn" class="my-6">
+      WARNING: Submitting config files will overwrite any existing allowances.
+    </Message>
 
     <h4>Registered DIDs</h4>
     <FileUpload
@@ -73,7 +77,11 @@
 // Imports
 import Button from 'primevue/button';
 import FileUpload from 'primevue/fileupload';
+import Message from 'primevue/message';
 import RadioButton from 'primevue/radiobutton';
 // Components
 import MainCardContent from '@/components/layout/mainCard/MainCardContent.vue';
+import { ref } from 'vue';
+
+const ingredient = ref('123');
 </script>

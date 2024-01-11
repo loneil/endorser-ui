@@ -37,7 +37,7 @@ const props = defineProps({
 const deleteRecord = (event: any) => {
   confirm.require({
     target: event.currentTarget,
-    message: t('apiKey.deleteConfirmation'),
+    message: t('allow.did.deleteConfirmation'),
     header: t('common.confirmation'),
     icon: 'pi pi-exclamation-triangle',
     accept: () => {
@@ -46,14 +46,14 @@ const deleteRecord = (event: any) => {
   });
 };
 const doDelete = () => {
-  // allowanceStore
-  //   .deleteApiKey(props.recordId)
-  //   .then(() => {
-  //     toast.success(t('apiKey.deleteSuccess'));
-  //   })
-  //   .catch((err) => {
-  //     console.error(err);
-  //     toast.error(`Failure: ${err}`);
-  //   });
+  allowanceStore
+    .deleteDid(props.recordId)
+    .then(() => {
+      toast.success(t('apiKey.deleteSuccess'));
+    })
+    .catch((err) => {
+      console.error(err);
+      toast.error(`Failure: ${err}`);
+    });
 };
 </script>

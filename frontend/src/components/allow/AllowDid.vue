@@ -65,6 +65,9 @@
           />
         </template>
       </Column>
+      <template #expansion="{ data }">
+        <RowExpandData :id="data.registered_did" :url="API_PATH.ALLOW_PUBLISH_DID" />
+      </template>
     </DataTable>
   </MainCardContent>
 </template>
@@ -83,6 +86,7 @@ import { useToast } from 'vue-toastification';
 import AddDid from './add/AddDid.vue';
 import DeleteDid from './delete/DeleteDid.vue';
 import MainCardContent from '@/components/layout/mainCard/MainCardContent.vue';
+import RowExpandData from '@/components/common/RowExpandData.vue';
 import { TABLE_OPT, API_PATH } from '@/helpers/constants';
 import { formatDids } from '@/helpers/tableFormatters';
 import { useAllowanceStore } from '@/store';

@@ -13,7 +13,9 @@
     @click="oidcLogin"
   />
   <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
-  <div v-if="error">{{ $t('admin.error') }}: {{ error }}</div>
+  <Message v-if="error" severity="error">
+    You do not have access to this Endorser Service.
+  </Message>
 </template>
 
 <script setup lang="ts">
@@ -24,6 +26,7 @@ import { storeToRefs } from 'pinia';
 // PrimeVue/etc
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
+import Message from 'primevue/message';
 import { useToast } from 'vue-toastification';
 const toast = useToast();
 

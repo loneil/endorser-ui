@@ -9,7 +9,7 @@
         </div>
 
         <div class="py-8">
-          <LoginOidc class="mt-0" />
+          <LoginOidc />
         </div>
       </div>
     </div>
@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import InputText from 'primevue/inputtext';
 import LoginOidc from './LoginOidc.vue';
 import SessionTimeoutModal from '@/components/common/SessionTimeoutModal.vue';
 </script>

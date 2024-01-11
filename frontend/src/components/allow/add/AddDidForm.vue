@@ -47,6 +47,7 @@ import { useAllowanceStore } from '@/store';
 
 const toast = useToast();
 
+const allowanceStore = useAllowanceStore();
 const { loading } = storeToRefs(useAllowanceStore());
 
 const emit = defineEmits(['closed', 'success']);
@@ -69,14 +70,9 @@ const handleSubmit = async (isFormValid: boolean) => {
     return;
   }
   try {
-    // const payload = {
-    //   content: formFields.msgContent,
-    // };
-
-    // // call store
-    // const conn_id = formFields.selectedConnection.value;
-    // await messageStore.sendMessage(conn_id, payload);
-    toast.info('Message Sent');
+    // call store
+    await allowanceStore.createDid(formFields.did);
+    toast.info('DID Allowance Added');
     emit('success');
     // close up on success
     emit('closed');

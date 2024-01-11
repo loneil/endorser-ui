@@ -17,6 +17,7 @@
     },
     "did": {
       "allow": "Allow DIDs",
+      "deleteConfirmation": "Are you sure you want to delete this DID allowance?",
       "did": "DID"
     },
     "schema": {
